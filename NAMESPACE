@@ -3,4 +3,4 @@
 export(dst_subjects)
 import(httr)
 importFrom(jsonlite,fromJSON)
-importFrom(rlang,arg_match)
+importFrom(rlang,abort)
