@@ -1,6 +1,7 @@
 #' @import httr
 #' @importFrom jsonlite fromJSON
 #' @importFrom rlang abort
+#' @importFrom tibble as_tibble
 
 #' @export
 dst_subjects <- function(lang = "en", columns = c("id", "description")) {
@@ -12,5 +13,5 @@ dst_subjects <- function(lang = "en", columns = c("id", "description")) {
           "subjects"')
   }
   GET_res <- GET(url, query = list(lang = lang, format = "JSON"))
-  fromJSON(content(GET_res, "text"))[columns]
+  as_tibble(fromJSON(content(GET_res, "text"))[columns])
 }
