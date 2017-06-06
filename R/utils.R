@@ -1,3 +1,5 @@
+#' @importFrom purrr keep
+
 url_api <- function(type) {
   if(!all(type %in% c("subjects", "tables", "tableinfo", "data"))) {
     abort('type can only take the values: "subjects", "tables", "tableinfo" or "data"')
@@ -21,3 +23,6 @@ lang_api <- function(lang) {
   lang
 }
 
+ignore_null <- function(x) {
+  keep(x, function(x) !is_null(x))
+}
