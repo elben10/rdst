@@ -7,8 +7,9 @@
 dst_subjects <- function(lang = "en", columns = c("id", "description")) {
   url <- url_api("subjects")
   lang <- lang_api(lang)
+  columns_values <- c("id", "description", "active", "hasSubjects", "subjects")
 
-  if(!all(columns %in% c("id", "description", "active", "hasSubjects", "subjects"))) {
+  if(!all(columns %in% columns_values)) {
     abort('Columns can only take the values: "id", "description", "active", "hasSubject" or
           "subjects"')
   }
