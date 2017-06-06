@@ -8,5 +8,10 @@ Authors@R: c(
 Description: The
 License: Download data from Statistics Denmark. The package does also provide some search tools to
     make the data exploration easier.
+Imports:
+    httr,
+    jsonlite,
+    purrr,
+    rlang
 Encoding: UTF-8
 LazyData: true
