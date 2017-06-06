@@ -1,5 +1,7 @@
 url_api <- function(type) {
-  arg_match(type, c("subjects", "tables", "tableinfo", "data"))
+  if(!all(type %in% c("subjects", "tables", "tableinfo", "data"))) {
+    abort('type can only take the values: "subjects", "tables", "tableinfo" or "data"')
+  }
 
   if(type == "subjects") {
     "http://api.statbank.dk/v1/subjects"
@@ -13,10 +15,14 @@ url_api <- function(type) {
 }
 
 lang_api <- function(lang) {
-  arg_match(lang, c("en", "da"))
+  if(!lang %in% c("en", "da")) {
+    abort('lang can only take the values: "en" or "da')
+  }
   lang
 }
 
 format_api <- function(format) {
-  arg_match(format, c("JSON", "XML"))
+  if(!format %in% c("JSON", "XML")) {
+    abort('format can only take the values: "JSON" or "XML"')
+  }
 }
