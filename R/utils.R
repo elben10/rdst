@@ -1,7 +1,7 @@
 url_api <- function(type) {
   arg_match(type, c("subjects", "tables", "tableinfo", "data"))
 
-  if(type == "subject") {
+  if(type == "subjects") {
     "http://api.statbank.dk/v1/subjects"
   } else if (type == "tables") {
     "http://api.statbank.dk/v1/tables"
@@ -15,4 +15,8 @@ url_api <- function(type) {
 lang_api <- function(lang) {
   arg_match(lang, c("en", "da"))
   lang
+}
+
+format_api <- function(format) {
+  arg_match(format, c("JSON", "XML"))
 }
