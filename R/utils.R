@@ -21,8 +21,3 @@ lang_api <- function(lang) {
   lang
 }
 
-format_api <- function(format) {
-  if(!format %in% c("JSON", "XML")) {
-    abort('format can only take the values: "JSON" or "XML"')
-  }
-}
