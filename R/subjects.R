@@ -15,6 +15,6 @@ dst_subjects <- function(lang = "en", columns = c("id", "description")) {
     abort('Columns can only take the values: "id", "description", "active", "hasSubject" or
           "subjects"')
   }
-  GET_res <- GET(url, query)
+  GET_res <- GET(url, query = query)
   as_tibble(fromJSON(content(GET_res, "text"))[columns])
 }
