@@ -27,11 +27,3 @@ ignore_null <- function(x) {
   keep(x, function(x) !is_null(x))
 }
 
-variables_api <- function(tableID, lang = "en") {
-  lang <- lang_api(lang)
-  url <- url_api("tableinfo")
-  query <- list(id = tableID, format = "JSON", lang = lang)
-
-  GET_res <- GET(url, query = query)
-  fromJSON(content(GET_res, "text"))[["variables"]]
-}
