@@ -26,3 +26,14 @@ lang_api <- function(lang) {
 ignore_null <- function(x) {
   keep(x, function(x) !is_null(x))
 }
+
+variables_api <- function(tableID, lang = "en") {
+  if(!all(lang %in% c("da", "en"))) {
+    abort('lang can only take the values: "en" or "da')
+  }
+  url <- url_api("tableinfo")
+  query <- list(id = tableID, format = "JSON", lang = lang)
+
+  GET_res <- GET(url, query = query)
+  fromJSON(content(GET_res, "text"))[["variables"]]
+}
