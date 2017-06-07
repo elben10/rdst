@@ -16,7 +16,8 @@ Imports:
     magrittr,
     glue,
     tibble,
-    stringr
+    stringr,
+    readr
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.0.1
