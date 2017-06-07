@@ -4,7 +4,7 @@
 
 #' @export
 dst_tables <- function(subjects = NULL, lang = "en", columns = c("id", "text")) {
-  url <- url_api("tables")
+  url <- modify_url_api("tables")
   lang <- lang_api(lang)
   query <- ignore_null(list(lang = lang, format = "JSON", subjects = subjects))
 
