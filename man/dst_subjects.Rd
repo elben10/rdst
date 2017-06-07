@@ -20,5 +20,6 @@ You can use `dst_subject()` to get the subjects, which Statistics Denmark use to
 their data sets.
 }
 \examples{
-View(dst_subjects())
+dst_subjects()
+dst_subjects(columns = c("id", "description", "active")) # is the data set active
 }
