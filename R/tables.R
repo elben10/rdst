@@ -21,10 +21,9 @@ NULL
 #' @examples
 #' dst_tables() # retrieve all tables
 #' dst_tables(subjectsID = "02") # Population and elections data sets
-dst_tables <- function(subjectsID = NULL, lang = "en", columns = c("id", "text")) {
+dst_tables <- function(subjectsID, lang = "en", columns = c("id", "text")) {
   url <- modify_url_api("tables")
   lang <- lang_api(lang)
-  query <- ignore_null(list(lang = lang, format = "JSON", subjects = subjectsID))
 
   columns_values <- c("id", "text", "unit", "updated", "firstPeriod", "latestPeriod",
                       "active", "variables")
@@ -35,9 +34,18 @@ dst_tables <- function(subjectsID = NULL, lang = "en", columns = c("id", "text")
                '"firstPeriod", "latestPeriod", "active" or "variables"'))
   }
 
-  if(!all(subjectsID %in% subjectsID_values) & !is_null(subjectsID)) {
-    abort(glue('subjects can only take the values: "01", "02", "03", "04", "05", "06", ',
-          '"07", "11", "13", "14", "16" or "18". See dst_subject()'))
+  if(!is_missing(subjectsID)) {
+    if(!all(subjectsID %in% subjectsID_values)) {
+      abort(glue('subjects can only take the values: "01", "02", "03", "04", "05", "06", ',
+                 '"07", "11", "13", "14", "16" or "18". See dst_subject()'))
+    }
+  }
+
+  if(is_missing(subjectsID)) {
+    query <- list(lang = lang, format = "JSON")
+  } else {
+    subjectsID <- str_c(subjectsID, collapse = ",")
+    query <- list(lang = lang, format = "JSON", subjects = subjectsID)
   }
 
   GET_res <- GET(url, query = query)
