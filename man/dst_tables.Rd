@@ -4,7 +4,7 @@
 \alias{dst_tables}
 \title{retrieve tables from Statistics Denmark}
 \usage{
-dst_tables(subjectsID = NULL, lang = "en", columns = c("id", "text"))
+dst_tables(subjectsID, lang = "en", columns = c("id", "text"))
 }
 \arguments{
 \item{subjectsID}{Should the data sets be within a specific field. See dst_subject() for IDs.}
