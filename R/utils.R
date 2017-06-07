@@ -1,5 +1,6 @@
 #' @importFrom purrr keep
 #' @importFrom stringr str_to_upper
+NULL
 
 modify_url_api <- function(type, tableID, lang = "en") {
   if(!all(type %in% c("subjects", "tables", "tableinfo", "data"))) {
