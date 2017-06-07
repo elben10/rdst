@@ -5,7 +5,7 @@
 
 #' @export
 dst_subjects <- function(lang = "en", columns = c("id", "description")) {
-  url <- url_api("subjects")
+  url <- modify_url_api("subjects")
   lang <- lang_api(lang)
   query <- list(lang = lang, format = "JSON")
 
