@@ -1,0 +1,21 @@
+---
+output:
+  github_document:
+    html_preview: false
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "README-"
+)
+options(tibble.print_min = 5, tibble.print_max = 5)
+```
+
+[![Build Status](https://travis-ci.org/elben10/rdst.svg?branch=master)](https://travis-ci.org/elben10/rdst)
+
+
+
