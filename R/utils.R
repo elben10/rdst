@@ -1,19 +1,21 @@
 #' @importFrom purrr keep
 #' @importFrom stringr str_to_upper
 
-url_api <- function(type) {
+modify_url_api <- function(type, tableID, lang = "en") {
   if(!all(type %in% c("subjects", "tables", "tableinfo", "data"))) {
     abort('type can only take the values: "subjects", "tables", "tableinfo" or "data"')
   }
 
+  url <- "http://api.statbank.dk"
+
   if(type == "subjects") {
-    "http://api.statbank.dk/v1/subjects"
-  } else if (type == "tables") {
-    "http://api.statbank.dk/v1/tables"
-  } else if (type == "tableinfo") {
-    "http://api.statbank.dk/v1/tableinfo"
+    modify_url(url, path = c("v1","subjects"))
+  } else if(type == "tables") {
+    modify_url(url, path = c("v1","tables"))
+  } else if(type == "tableinfo") {
+    modify_url(url, path = c("v1", "tableinfo", table_api(tableID)))
   } else {
-    "http://api.statbank.dk/v1/data"
+    modify_url(url, path = c("v1", "data", table_api(tableID), "CSV"))
   }
 }
 
@@ -37,4 +39,17 @@ table_api <- function(tableID) {
   }
 
   tableID
+}
+
+vars_api <- function(tableID, vars) {
+  if(!is_missing(vars)) {
+    if(!all(vars %in% flatten_chr(dst_variables(tableID, columns = "id")))) {
+      abort(glue('vars can take the following values: ',
+                 '{str_c(flatten_chr(dst_variables("BEV22", columns = "id")), collapse = ", ")}. ',
+                 'The values must be provided as an charactervector. ',
+                 'See dst_variables() for explanation of the vars'))
+    } else {
+      return(vars)
+    }
+  }
 }
