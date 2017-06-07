@@ -16,7 +16,8 @@ NULL
 #' @return Tibble containing the specified columns in the chosen language.
 #' @export
 #' @examples
-#' View(dst_subjects())
+#' dst_subjects()
+#' dst_subjects(columns = c("id", "description", "active")) # is the data set active
 dst_subjects <- function(lang = "en", columns = c("id", "description")) {
   url <- modify_url_api("subjects")
   lang <- lang_api(lang)
