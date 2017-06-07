@@ -5,9 +5,9 @@ Version: 0.1.0
 Authors@R: c(
     person("Elben", "Jakob Jul", , "elbenjakobjul@gmail.com", c("aut", "cre"))
     )
-Description: The
-License: Download data from Statistics Denmark. The package does also provide some search tools to
+Description: Download data from Statistics Denmark. The package does also provide some search tools to
     make the data exploration easier.
+License: MIT + file LICENSE
 Imports:
     httr,
     jsonlite,
