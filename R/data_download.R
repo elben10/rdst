@@ -23,10 +23,9 @@ dst_download <- function(tableID, vars, lang = "en") {
   lang <- lang_api(lang)
   url <- modify_url_api("data", tableID = tableID)
   if(is_missing(vars)) {
-    warning("No vars is specified.")
+    warning("No vars is specified. Only time will be included")
     query <-  list(lang = lang, Tid = "*")
   }
-
   vars <- vars_api(tableID, vars)
   vars <- set_names(rep("*", length(vars)), vars)
 
@@ -67,7 +66,7 @@ dst_variables <- function(tableID, lang = "en", columns = c("id", "text")) {
   columns_values <- c("id", "text", "elimination", "time", "map", "values")
 
   if(!all(columns %in% columns_values)) {
-    glue('columns can take the values: {columns_values}', sep = ", ")
+    abort(glue('columns can take the values: {columns_values}', sep = ", "))
   }
 
   GET_res <- GET(url, query = query)
