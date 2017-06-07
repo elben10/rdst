@@ -1,4 +1,5 @@
 #' @importFrom purrr keep
+#' @importFrom stringr str_to_upper
 
 url_api <- function(type) {
   if(!all(type %in% c("subjects", "tables", "tableinfo", "data"))) {
@@ -27,3 +28,13 @@ ignore_null <- function(x) {
   keep(x, function(x) !is_null(x))
 }
 
+table_api <- function(tableID) {
+  if(is_missing(tableID)) {
+    abort("tableID must be provided. See dst_tables()")
+  }
+  if(!(str_to_upper(tableID) %in% flatten_chr(dst_tables(columns = "id")))) {
+    abort("tableID is not correct. See dst_tables()")
+  }
+
+  tableID
+}
