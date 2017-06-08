@@ -28,7 +28,6 @@ lang_helper <- function(lang) {
   lang
 }
 
-#' @export
 date_helper <- function(tableID, lang = "en") {
   lang_helper(lang)
   table_helper(tableID)
@@ -69,7 +68,6 @@ is_month <- function(date_vector) {
   all(str_detect(date_vector, "^[0-9][0-9][0-9][0-9]M[0-9][0-9]$"))
 }
 
-#' @export
 date_type <- function(date_vector, lang) {
   if(length(date_vector) != 2 | !is_character(date_vector)) {
     abort(glue('date_vector must be a character vector of length 2. Containing firstPeriod',
