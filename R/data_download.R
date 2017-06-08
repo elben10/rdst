@@ -3,6 +3,7 @@
 #' @importFrom readr read_csv2
 #' @importFrom rlang is_character
 #' @importFrom rlang set_names
+#' @importFrom readr locale
 NULL
 
 #' download data sets from Statistics Denmark
@@ -30,10 +31,14 @@ dst_download <- function(tableID, vars, lang = "en") {
   vars <- set_names(rep("*", length(vars)), vars)
 
   if("Tid" %in% names(vars)) {
-    query <- c(list(lang = lang), vars)
+    vars <- vars[!names(vars) %in% "Tid"]
+    query <- c(list(lang = lang, Tid = "*"), vars)
   } else {
     query <- c(list(lang = lang, Tid = "*"), vars)
   }
+
+  col_types <- str_c(rep("c", times = (length(vars)+1)), collapse = "")
+  col_types <- str_c(col_types, "d")
 
 
   if(status_code(GET(url, query = query)) == 400) {
@@ -41,7 +46,10 @@ dst_download <- function(tableID, vars, lang = "en") {
     abort(msg)
   }
 
-  read_csv2(modify_url(url, query = query), na = c(".."))
+  res <- read_csv2(modify_url(url, query = query), na = c(".."), col_types = col_types,
+            locale = locale(decimal_mark = ",", grouping_mark = "."))
+  res["TID"] <- parse_date_helper(res[["TID"]])
+  res
 }
 
 #' get data set variables
