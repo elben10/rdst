@@ -20,13 +20,13 @@ NULL
 #' dst_download("folk1a")
 #' dst_download("folk1a", c("ALDER", "CIVILSTAND"))
 dst_download <- function(tableID, vars, lang = "en") {
-  lang <- lang_api(lang)
-  url <- modify_url_api("data", tableID = tableID)
+  lang <- lang_helper(lang)
+  url <- modify_url_helper("data", tableID = tableID)
   if(is_missing(vars)) {
     warning("No vars is specified. Only time will be included")
     query <-  list(lang = lang, Tid = "*")
   }
-  vars <- vars_api(tableID, vars)
+  vars <- vars_helper(tableID, vars)
   vars <- set_names(rep("*", length(vars)), vars)
 
   if("Tid" %in% names(vars)) {
@@ -59,9 +59,9 @@ dst_download <- function(tableID, vars, lang = "en") {
 #' dst_variables("folk1a")
 #' dst_variables("folk1a", columns = c("id", "text", "time"))
 dst_variables <- function(tableID, lang = "en", columns = c("id", "text")) {
-  lang <- lang_api(lang)
-  url <- modify_url_api("tableinfo", tableID = tableID)
-  tableID <- table_api(tableID)
+  lang <- lang_helper(lang)
+  url <- modify_url_helper("tableinfo", tableID = tableID)
+  tableID <- table_helper(tableID)
   query <- list(format = "JSON", lang = lang)
   columns_values <- c("id", "text", "elimination", "time", "map", "values")
 

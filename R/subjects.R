@@ -19,8 +19,8 @@ NULL
 #' dst_subjects()
 #' dst_subjects(columns = c("id", "description", "active")) # is the data set active
 dst_subjects <- function(lang = "en", columns = c("id", "description")) {
-  url <- modify_url_api("subjects")
-  lang <- lang_api(lang)
+  url <- modify_url_helper("subjects")
+  lang <- lang_helper(lang)
   query <- list(lang = lang, format = "JSON")
 
   columns_values <- c("id", "description", "active", "hasSubjects", "subjects")
