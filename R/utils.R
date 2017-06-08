@@ -14,9 +14,9 @@ modify_url_helper <- function(type, tableID, lang = "en") {
   } else if(type == "tables") {
     modify_url(url, path = c("v1","tables"))
   } else if(type == "tableinfo") {
-    modify_url(url, path = c("v1", "tableinfo", table_api(tableID)))
+    modify_url(url, path = c("v1", "tableinfo", table_helper(tableID)))
   } else {
-    modify_url(url, path = c("v1", "data", table_api(tableID), "CSV"))
+    modify_url(url, path = c("v1", "data", table_helper(tableID), "CSV"))
   }
 }
 
