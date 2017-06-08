@@ -27,10 +27,6 @@ lang_api <- function(lang) {
   lang
 }
 
-ignore_null <- function(x) {
-  keep(x, function(x) !is_null(x))
-}
-
 table_api <- function(tableID) {
   if(is_missing(tableID)) {
     abort("tableID must be provided. See dst_tables()")
