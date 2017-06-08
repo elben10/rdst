@@ -57,11 +57,6 @@ is_month <- function(date_vector) {
   all(str_detect(date_vector, "^[0-9][0-9][0-9][0-9]M[0-9][0-9]$"))
 }
 
-
-is_year_interval <- function(date_vector) {
-  all(str_detect(date_vector, "^[0-9][0-9][0-9][0-9]:[0-9][0-9][0-9][0-9]$"))
-}
-
 is_halfyear <- function(date_vector) {
     all(str_detect(date_vector, "^[0-9][0-9][0-9][0-9]H[1-2]"))
 }
@@ -70,4 +65,73 @@ is_date <- function(date_vector) {
   all(str_detect(date_vector, "^[0-9][0-9][0-9][0-9]M[0-1][0-9]D[0-3][0-9]"))
 }
 
+make_myd <- function(m, y, d) {
+  myd(str_c(m, y, d))
+}
 
+make_year_helper <- function(x) {
+  make_myd("01", x, "01")
+}
+
+
+make_quarter_helper <- function(x) {
+  year <- str_sub(x, 1, 4)
+  quarter <- str_sub(x, 6, 6)
+
+  if(quarter == "1") {
+    month <- "01"
+  } else if(quarter == "2") {
+    month <- "04"
+  } else if(quarter == "3") {
+    month <- "07"
+  } else {
+    month <- "10"
+  }
+
+  make_myd(month, year, "01")
+}
+
+make_month_helper <- function(x) {
+  year <- str_sub(x, 1, 4)
+  month <- str_sub(x, 6, 7)
+
+  make_myd(month, year, "01")
+}
+
+make_halfyear_helper <- function(x) {
+  year <- str_sub(x, 1, 4)
+  halfyear <- str_sub(x, 6, 6)
+
+  if(halfyear == "1") {
+    month <- "01"
+  } else {
+    month <- "07"
+  }
+
+  make_myd(month, year, "01")
+}
+
+make_date_helper <- function(x) {
+  year <- str_sub(x, 1, 4)
+  month <- str_sub(x, 6, 7)
+  day <- str_sub(x, 8, 10)
+
+  make_myd(month, year, day)
+}
+
+parse_date_helper <- function(x) {
+  if(is_year(x)) {
+    as_date(map_dbl(x, make_year_helper))
+  } else if(is_quarter(x)) {
+    as_date(map_dbl(x, make_quarter_helper))
+  } else if(is_month(x)) {
+    as_date(map_dbl(x, make_month_helper))
+  } else if(is_date(x)) {
+    as_date(map_dbl(x, make_date_helper))
+  } else if(is_halfyear(x)) {
+    as_date(map_dbl(x, make_halfyear_helper))
+  } else {
+    warning("Time has been returned as character, because it does not have a convertible format")
+    x
+  }
+}
