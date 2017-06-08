@@ -1,6 +1,11 @@
 #' @importFrom purrr keep
+#' @importFrom purrr map_dbl
+#' @importFrom purrr map2_dbl
 #' @importFrom stringr str_to_upper
 #' @importFrom stringr str_detect
+#' @importFrom stringr str_sub
+#' @importFrom lubridate myd
+#' @importFrom lubridate as_date
 NULL
 
 modify_url_helper <- function(type, tableID, lang = "en") {
@@ -41,11 +46,7 @@ date_helper <- function(tableID, lang = "en") {
 }
 
 is_quarter <- function(date_vector, lang) {
-  if(lang == "en") {
-    return(all(str_detect(date_vector, "^[0-9][0-9][0-9][0-9]Q[1-4]$")))
-  } else {
-    return(all(str_detect(date_vector, "^[0-9][0-9][0-9][0-9]K[1-4]$")))
-  }
+  return(all(str_detect(date_vector, "^[0-9][0-9][0-9][0-9](Q|K)[1-4]$")))
 }
 
 is_year <- function(date_vector) {
@@ -68,36 +69,5 @@ is_halfyear <- function(date_vector) {
 is_date <- function(date_vector) {
   all(str_detect(date_vector, "^[0-9][0-9][0-9][0-9]M[0-1][0-9]D[0-3][0-9]"))
 }
-
-date_type <- function(date_vector, lang) {
-  if(length(date_vector) != 2 | !is_character(date_vector)) {
-    abort(glue('date_vector must be a character vector of length 2. Containing firstPeriod',
-               'and last period from '))
-  }
-
-  if(is_year(date_vector)) {
-    return("year")
-  } else if(is_quarter(date_vector, lang)) {
-    return("quarter")
-  } else if(is_month(date_vector)) {
-    return("month")
-  } else if(is_year_interval(date_vector)){
-    return("year_inteval")
-  } else if(is_halfyear(date_vector)) {
-    return("half_year")
-  } else if(is_date(date_vector)) {
-    return("date")
-  } else {
-    return("other")
-  }
-}
-
-
-
-
-
-
-
-
 
 
