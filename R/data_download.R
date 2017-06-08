@@ -73,4 +73,16 @@ dst_variables <- function(tableID, lang = "en", columns = c("id", "text")) {
   fromJSON(content(GET_res, "text"))[["variables"]][columns]
 }
 
+vars_helper <- function(tableID, vars) {
+  if(!is_missing(vars)) {
+    if(!all(vars %in% flatten_chr(dst_variables(tableID, columns = "id")))) {
+      abort(glue('vars can take the following values: ',
+                 '{str_c(flatten_chr(dst_variables("BEV22", columns = "id")), collapse = ", ")}. ',
+                 'The values must be provided as an charactervector. ',
+                 'See dst_variables() for explanation of the vars'))
+    } else {
+      return(vars)
+    }
+  }
+}
 
