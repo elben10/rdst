@@ -1,7 +1,3 @@
-reference:
-  - title: "Metadata"
-    contents:
-      - dst_download
-      - dst_subjects
-      - dst_tables
-      - dst_variables
+template:
+  params:
+    bootswatch: paper
