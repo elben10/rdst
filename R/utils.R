@@ -45,7 +45,7 @@ date_helper <- function(tableID, lang = "en") {
 
 }
 
-is_quarter <- function(date_vector, lang) {
+is_quarter <- function(date_vector) {
   return(all(str_detect(date_vector, "^[0-9][0-9][0-9][0-9](Q|K)[1-4]$")))
 }
 
