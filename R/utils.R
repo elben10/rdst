@@ -33,18 +33,6 @@ lang_helper <- function(lang) {
   lang
 }
 
-date_helper <- function(tableID, lang = "en") {
-  lang_helper(lang)
-  table_helper(tableID)
-
-  tables <- dst_tables(lang = lang, columns = c("id", "firstPeriod", "latestPeriod"))
-  date <- tables[which(str_to_upper(tableID) == tables["id"]),c("firstPeriod", "latestPeriod")]
-  date <- flatten_chr(date)
-
-  date_type(date, lang)
-
-}
-
 is_quarter <- function(date_vector) {
   all(str_detect(date_vector, "^[0-9][0-9][0-9][0-9](Q|K)[1-4]$"))
 }
