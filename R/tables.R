@@ -51,3 +51,14 @@ dst_tables <- function(subjectsID, lang = "en", columns = c("id", "text")) {
   GET_res <- GET(url, query = query)
   as_tibble(fromJSON(content(GET_res, "text"))[columns])
 }
+
+table_helper <- function(tableID) {
+  if(is_missing(tableID)) {
+    abort("tableID must be provided. See dst_tables()")
+  }
+  if(!(str_to_upper(tableID) %in% flatten_chr(dst_tables(columns = "id")))) {
+    abort("tableID is not correct. See dst_tables()")
+  }
+
+  tableID
+}
