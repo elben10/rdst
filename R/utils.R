@@ -1,5 +1,6 @@
 #' @importFrom purrr keep
 #' @importFrom stringr str_to_upper
+#' @importFrom stringr str_detect
 NULL
 
 modify_url_helper <- function(type, tableID, lang = "en") {
@@ -26,6 +27,71 @@ lang_helper <- function(lang) {
   }
   lang
 }
+
+#' @export
+date_helper <- function(tableID, lang = "en") {
+  lang_helper(lang)
+  table_helper(tableID)
+
+  tables <- dst_tables(lang = lang, columns = c("id", "firstPeriod", "latestPeriod"))
+  date <- tables[which(str_to_upper(tableID) == tables["id"]),c("firstPeriod", "latestPeriod")]
+  date <- flatten_chr(date)
+
+  date_type(date, lang)
+
+}
+
+is_quarter <- function(date_vector, lang) {
+  if(length(date_vector) != 2 | !is_character(date_vector)) {
+    abort(glue('date_vector must be a character vector of length 2. Containing firstPeriod',
+               'and last period from '))
+  }
+  if(lang == "en") {
+    return(all(str_detect(date_vector, "^[0-9][0-9][0-9][0-9]Q[1-4]$")))
+  } else {
+    return(all(str_detect(date_vector, "^[0-9][0-9][0-9][0-9]K[1-4]$")))
+  }
+}
+
+is_year <- function(date_vector) {
+  if(length(date_vector) != 2 | !is_character(date_vector)) {
+    abort(glue('date_vector must be a character vector of length 2. Containing firstPeriod',
+               'and last period from '))
+  }
+  all(str_detect(date_vector, "^[0-9][0-9][0-9][0-9]$"))
+}
+
+is_month <- function(date_vector) {
+  if(length(date_vector) != 2 | !is_character(date_vector)) {
+    abort(glue('date_vector must be a character vector of length 2. Containing firstPeriod',
+               'and last period from '))
+  }
+  all(str_detect(date_vector, "^[0-9][0-9][0-9][0-9]M[0-9][0-9]$"))
+}
+
+#' @export
+date_type <- function(date_vector, lang) {
+  if(length(date_vector) != 2 | !is_character(date_vector)) {
+    abort(glue('date_vector must be a character vector of length 2. Containing firstPeriod',
+               'and last period from '))
+  }
+
+  if(is_year(date_vector)) {
+    return("year")
+  } else if(is_quarter(date_vector, lang)) {
+    return("quarter")
+  } else if (is_month(date_vector)) {
+    return("month")
+  } else {
+    return("other")
+  }
+}
+
+
+
+
+
+
 
 
 
