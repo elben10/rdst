@@ -2,7 +2,7 @@
 #' @importFrom stringr str_to_upper
 NULL
 
-modify_url_api <- function(type, tableID, lang = "en") {
+modify_url_helper <- function(type, tableID, lang = "en") {
   if(!all(type %in% c("subjects", "tables", "tableinfo", "data"))) {
     abort('type can only take the values: "subjects", "tables", "tableinfo" or "data"')
   }
@@ -20,7 +20,7 @@ modify_url_api <- function(type, tableID, lang = "en") {
   }
 }
 
-lang_api <- function(lang) {
+lang_helper <- function(lang) {
   if(!lang %in% c("en", "da")) {
     abort('lang can only take the values: "en" or "da')
   }
