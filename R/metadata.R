@@ -1,14 +1,27 @@
 #' @importFrom purrr flatten
 NULL
 
+#' get information about Statistics Denmark's data sets
+#'
+#' You can use the function to retrieve information about all the data sets available at
+#' Statistics Denmark. For instance, you could get the time at which a specific data set
+#' previously was updated
+#'
+#' @param tableID the data set's ID. See dst_tables()
+#' @param lang used language in the data set. Can take the values "da" for danish and "en" for
+#' english.
+#' @param columns the columns returned. columns can take the values: id, text, description,
+#' unit, updated, name, phone, mail, documentationID, url or footnote.
 #' @export
-dst_information <- function(tableID, lang = "en", columns = c("id", "description", "name", "mail")) {
+#' @examples dst_information("folk1a")
+dst_information <- function(tableID, lang = "en",
+                            columns = c("id", "description", "contactperson", "mail")) {
   lang_helper(lang)
   url <- modify_url_helper("tableinfo", tableID = tableID)
   table_helper(tableID)
   query <- list(format = "JSON", lang = lang)
 
-  columns_values <- c("id", "text", "description", "unit", "updated", "name", "phone",
+  columns_values <- c("id", "text", "description", "unit", "updated", "contactperson", "phone",
                       "mail", "documentationID", "url", "footnote")
 
   if(!all(columns %in% columns_values)) {
@@ -22,6 +35,7 @@ dst_information <- function(tableID, lang = "en", columns = c("id", "description
                 flatten(extract_helper(GET_res, 7)),
                 extract_helper(GET_res, 8))
 
+  names(gen_info)[6] <- "contactperson"
   names(gen_info)[9] <- "documentationID"
   print_information(gen_info[columns])
 }
@@ -34,7 +48,17 @@ print_information <- function(x) {
   cat(str_c(names(x), flatten_chr(x), sep = ": "), sep = "\n")
 }
 
+#' get tibble with variable values
+#'
+#' you can use this function to see, which values the data set's variables can take
+#'
+#' @param tableID the data set's ID. See dst_tables()
+#' @param lang used language in the data set. Can take the values "da" for danish and "en" for
+#' english.
+#'
 #' @export
+#' @examples
+#' dst_variable_values("folk1a")
 dst_variable_values <- function(tableID, lang = "en") {
   lang_helper(lang)
   url <- modify_url_helper("tableinfo", tableID = tableID)
