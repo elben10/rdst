@@ -22,8 +22,8 @@ NULL
 #' dst_tables() # retrieve all tables
 #' dst_tables(subjectsID = "02") # Population and elections data sets
 dst_tables <- function(subjectsID, lang = "en", columns = c("id", "text")) {
-  url <- modify_url_api("tables")
-  lang <- lang_api(lang)
+  url <- modify_url_helper("tables")
+  lang <- lang_helper(lang)
 
   columns_values <- c("id", "text", "unit", "updated", "firstPeriod", "latestPeriod",
                       "active", "variables")
