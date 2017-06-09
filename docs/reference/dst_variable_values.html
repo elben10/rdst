@@ -93,7 +93,21 @@ english.</p></td>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>dst_variables_values</span>(<span class='st'>"folk1a"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in dst_variables_values("folk1a"): could not find function "dst_variables_values"</span></div></pre>
+    <pre class="examples"><div class='input'><span class='fu'>dst_variable_values</span>(<span class='st'>"folk1a"</span>)</div><div class='output co'>#&gt; # A tibble: 127 x 10
+#&gt;    OMRÅDE             region   KØN   sex ALDER     age CIVILSTAND
+#&gt;     &lt;chr&gt;              &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;      &lt;chr&gt;
+#&gt;  1    000        All Denmark   TOT Total  IALT   Total        TOT
+#&gt;  2    084 Region Hovedstaden     1   Men     0  0 year          U
+#&gt;  3    101         Copenhagen     2 Women     1  1 year          G
+#&gt;  4    147      Frederiksberg  &lt;NA&gt;  &lt;NA&gt;     2 2 years          E
+#&gt;  5    155             Dragør  &lt;NA&gt;  &lt;NA&gt;     3 3 years          F
+#&gt;  6    185             Tårnby  &lt;NA&gt;  &lt;NA&gt;     4 4 years       &lt;NA&gt;
+#&gt;  7    165        Albertslund  &lt;NA&gt;  &lt;NA&gt;     5 5 years       &lt;NA&gt;
+#&gt;  8    151           Ballerup  &lt;NA&gt;  &lt;NA&gt;     6 6 years       &lt;NA&gt;
+#&gt;  9    153            Brøndby  &lt;NA&gt;  &lt;NA&gt;     7 7 years       &lt;NA&gt;
+#&gt; 10    157           Gentofte  &lt;NA&gt;  &lt;NA&gt;     8 8 years       &lt;NA&gt;
+#&gt; # ... with 117 more rows, and 3 more variables: `marital status` &lt;chr&gt;,
+#&gt; #   Tid &lt;chr&gt;, time &lt;chr&gt;</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

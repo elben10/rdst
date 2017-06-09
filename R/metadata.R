@@ -1,4 +1,5 @@
 #' @importFrom purrr flatten
+#' @importFrom purrr map
 NULL
 
 #' get information about Statistics Denmark's data sets
