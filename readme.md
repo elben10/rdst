@@ -92,4 +92,4 @@ dst_download("FOLK1A") %>%
 #> included
 ```
 
-![](README-unnamed-chunk-8-1.png)
+![](figures/README-unnamed-chunk-8-1.png)
