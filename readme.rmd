@@ -47,7 +47,7 @@ As default, the function will only return two columns containing a short descrip
 dst_tables(columns = c("id", "text", "updated"))
 ```
 
-There is also more information available such as the first and the last period of the data sets. To see all the available columns see [dst_tables()](https://elben10.github.io/rdst/reference/dst_tables.html)
+There is also more information available such as the first and the last period of the data sets. To see all the available columns see ```dst_tables()```.
 
 It is crucial to know which variables is contained in a data set. To that purpose we can use the ```dst_variables()``` function. If we provide the function with a table ID provided as a charactervector it will return a tibble which has two columns. A column with the variable ID, and column with a short description of the variable. If we are interessted in the population growth in Denmark, we could find, which variables that are contained in the data set *FOLK1A*. 
 
@@ -69,8 +69,23 @@ library(magrittr)
 
 dst_download("FOLK1A") %>%
   ggplot(aes(TID, INDHOLD)) +
-  geom_line()
+  geom_line() +
+  xlab("Time") +
+  ylab("Count")
 ```
+
+We could make the same figure, but where we include the gender. The variable *KØN* means gender in danish. To see the translations see ```dst_variables()```. We use the package ```dplyr``` to exclude all total observations.
+
+```{r}
+library(dplyr)
+dst_download("FOLK1a", "KØN") %>%
+  filter(KØN != "Total") %>%
+  ggplot(aes(TID, INDHOLD, colour = KØN)) +
+  geom_line() +
+  xlab("Time") +
+  ylab("Count")
+```
+
 
 
 

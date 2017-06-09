@@ -66,7 +66,7 @@ devtools::<span class="kw">install_github</span>(<span class="st">"elben10/rdst"
 <a href="#usage" class="anchor"></a>Usage</h2>
 <p>The aim of the package is to make it easier to access data from Statistics Denmark. To access an overview of the collection of data sets we could use the function <code><a href="reference/dst_tables.html">dst_tables()</a></code>. It returns a tibble containing information about all data sets available at Statistics Denmark.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/dst_tables.html">dst_tables</a></span>()
-<span class="co">#&gt; # A tibble: 1,853 x 2</span>
+<span class="co">#&gt; # A tibble: 1,852 x 2</span>
 <span class="co">#&gt;       id                                       text</span>
 <span class="co">#&gt; *  &lt;chr&gt;                                      &lt;chr&gt;</span>
 <span class="co">#&gt; 1 FOLK1A Population at the first day of the quarter</span>
@@ -74,10 +74,10 @@ devtools::<span class="kw">install_github</span>(<span class="st">"elben10/rdst"
 <span class="co">#&gt; 3 FOLK1C Population at the first day of the quarter</span>
 <span class="co">#&gt; 4 FOLK1D Population at the first day of the quarter</span>
 <span class="co">#&gt; 5 FOLK1E Population at the first day of the quarter</span>
-<span class="co">#&gt; # ... with 1,848 more rows</span></code></pre></div>
+<span class="co">#&gt; # ... with 1,847 more rows</span></code></pre></div>
 <p>As default, the function will only return two columns containing a short description of the data set, and the data set’s ID. Though, it is possible to get more information about the data set using the column argument. For instance, we could be interested in when some data sets was last updated, or just be interested in new data from Statistics Denmark. To see when a data set most recently was updated we could use the following piece of code.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/dst_tables.html">dst_tables</a></span>(<span class="dt">columns =</span> <span class="kw">c</span>(<span class="st">"id"</span>, <span class="st">"text"</span>, <span class="st">"updated"</span>))
-<span class="co">#&gt; # A tibble: 1,853 x 3</span>
+<span class="co">#&gt; # A tibble: 1,852 x 3</span>
 <span class="co">#&gt;       id                                       text             updated</span>
 <span class="co">#&gt; *  &lt;chr&gt;                                      &lt;chr&gt;               &lt;chr&gt;</span>
 <span class="co">#&gt; 1 FOLK1A Population at the first day of the quarter 2017-05-11T09:00:00</span>
@@ -85,8 +85,8 @@ devtools::<span class="kw">install_github</span>(<span class="st">"elben10/rdst"
 <span class="co">#&gt; 3 FOLK1C Population at the first day of the quarter 2017-05-11T09:00:00</span>
 <span class="co">#&gt; 4 FOLK1D Population at the first day of the quarter 2017-05-11T09:00:00</span>
 <span class="co">#&gt; 5 FOLK1E Population at the first day of the quarter 2017-05-11T09:00:00</span>
-<span class="co">#&gt; # ... with 1,848 more rows</span></code></pre></div>
-<p>There is also more information available such as the first and the last period of the data sets. To see all the available columns see <a href="https://elben10.github.io/rdst/reference/dst_tables.html">dst_tables()</a></p>
+<span class="co">#&gt; # ... with 1,847 more rows</span></code></pre></div>
+<p>There is also more information available such as the first and the last period of the data sets. To see all the available columns see <code><a href="reference/dst_tables.html">dst_tables()</a></code>.</p>
 <p>It is crucial to know which variables is contained in a data set. To that purpose we can use the <code><a href="reference/dst_variables.html">dst_variables()</a></code> function. If we provide the function with a table ID provided as a charactervector it will return a tibble which has two columns. A column with the variable ID, and column with a short description of the variable. If we are interessted in the population growth in Denmark, we could find, which variables that are contained in the data set <em>FOLK1A</em>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/dst_variables.html">dst_variables</a></span>(<span class="st">"FOLK1A"</span>)
 <span class="co">#&gt;           id           text</span>
@@ -114,10 +114,29 @@ devtools::<span class="kw">install_github</span>(<span class="st">"elben10/rdst"
 
 <span class="kw"><a href="reference/dst_download.html">dst_download</a></span>(<span class="st">"FOLK1A"</span>) %&gt;%
 <span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(TID, INDHOLD)) +
-<span class="st">  </span><span class="kw">geom_line</span>()
+<span class="st">  </span><span class="kw">geom_line</span>() +
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">"Time"</span>) +
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">"Count"</span>)
 <span class="co">#&gt; Warning in dst_download("FOLK1A"): No vars is specified. Only time will be</span>
 <span class="co">#&gt; included</span></code></pre></div>
-<p><img src="README-unnamed-chunk-8-1.png" width="672"></p>
+<p><img src="figures/README-unnamed-chunk-8-1.png" width="672"></p>
+<p>We could make the same figure, but where we include the gender. The variable <em>KØN</em> means gender in danish. To see the translations see <code><a href="reference/dst_variables.html">dst_variables()</a></code>. We use the package <code>dplyr</code> to exclude all total observations.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Attaching package: 'dplyr'</span>
+<span class="co">#&gt; The following objects are masked from 'package:stats':</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;     filter, lag</span>
+<span class="co">#&gt; The following objects are masked from 'package:base':</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;     intersect, setdiff, setequal, union</span>
+<span class="kw"><a href="reference/dst_download.html">dst_download</a></span>(<span class="st">"FOLK1a"</span>, <span class="st">"KØN"</span>) %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(KØN !=<span class="st"> "Total"</span>) %&gt;%
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(TID, INDHOLD, <span class="dt">colour =</span> KØN)) +
+<span class="st">  </span><span class="kw">geom_line</span>() +
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">"Time"</span>) +
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">"Count"</span>)</code></pre></div>
+<p><img src="figures/README-unnamed-chunk-9-1.png" width="672"></p>
 </div>
 </div>
   </div>

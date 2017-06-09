@@ -22,7 +22,7 @@ The aim of the package is to make it easier to access data from Statistics Denma
 
 ``` r
 dst_tables()
-#> # A tibble: 1,853 x 2
+#> # A tibble: 1,852 x 2
 #>       id                                       text
 #> *  <chr>                                      <chr>
 #> 1 FOLK1A Population at the first day of the quarter
@@ -30,14 +30,14 @@ dst_tables()
 #> 3 FOLK1C Population at the first day of the quarter
 #> 4 FOLK1D Population at the first day of the quarter
 #> 5 FOLK1E Population at the first day of the quarter
-#> # ... with 1,848 more rows
+#> # ... with 1,847 more rows
 ```
 
 As default, the function will only return two columns containing a short description of the data set, and the data set's ID. Though, it is possible to get more information about the data set using the column argument. For instance, we could be interested in when some data sets was last updated, or just be interested in new data from Statistics Denmark. To see when a data set most recently was updated we could use the following piece of code.
 
 ``` r
 dst_tables(columns = c("id", "text", "updated"))
-#> # A tibble: 1,853 x 3
+#> # A tibble: 1,852 x 3
 #>       id                                       text             updated
 #> *  <chr>                                      <chr>               <chr>
 #> 1 FOLK1A Population at the first day of the quarter 2017-05-11T09:00:00
@@ -45,10 +45,10 @@ dst_tables(columns = c("id", "text", "updated"))
 #> 3 FOLK1C Population at the first day of the quarter 2017-05-11T09:00:00
 #> 4 FOLK1D Population at the first day of the quarter 2017-05-11T09:00:00
 #> 5 FOLK1E Population at the first day of the quarter 2017-05-11T09:00:00
-#> # ... with 1,848 more rows
+#> # ... with 1,847 more rows
 ```
 
-There is also more information available such as the first and the last period of the data sets. To see all the available columns see [dst\_tables()](https://elben10.github.io/rdst/reference/dst_tables.html)
+There is also more information available such as the first and the last period of the data sets. To see all the available columns see `dst_tables()`.
 
 It is crucial to know which variables is contained in a data set. To that purpose we can use the `dst_variables()` function. If we provide the function with a table ID provided as a charactervector it will return a tibble which has two columns. A column with the variable ID, and column with a short description of the variable. If we are interessted in the population growth in Denmark, we could find, which variables that are contained in the data set *FOLK1A*.
 
@@ -87,9 +87,33 @@ library(magrittr)
 
 dst_download("FOLK1A") %>%
   ggplot(aes(TID, INDHOLD)) +
-  geom_line()
+  geom_line() +
+  xlab("Time") +
+  ylab("Count")
 #> Warning in dst_download("FOLK1A"): No vars is specified. Only time will be
 #> included
 ```
 
 ![](figures/README-unnamed-chunk-8-1.png)
+
+We could make the same figure, but where we include the gender. The variable *KØN* means gender in danish. To see the translations see `dst_variables()`. We use the package `dplyr` to exclude all total observations.
+
+``` r
+library(dplyr)
+#> 
+#> Attaching package: 'dplyr'
+#> The following objects are masked from 'package:stats':
+#> 
+#>     filter, lag
+#> The following objects are masked from 'package:base':
+#> 
+#>     intersect, setdiff, setequal, union
+dst_download("FOLK1a", "KØN") %>%
+  filter(KØN != "Total") %>%
+  ggplot(aes(TID, INDHOLD, colour = KØN)) +
+  geom_line() +
+  xlab("Time") +
+  ylab("Count")
+```
+
+![](figures/README-unnamed-chunk-9-1.png)
