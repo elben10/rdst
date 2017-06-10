@@ -6,6 +6,7 @@
 #' @importFrom rlang is_character
 #' @importFrom rlang set_names
 #' @importFrom rlang is_named
+#' @importFrom rlang as_list
 #' @importFrom readr locale
 NULL
 
@@ -23,7 +24,7 @@ NULL
 #' @examples
 #' dst_download("folk1a")
 #' dst_download("folk1a", c("ALDER", "CIVILSTAND"))
-dst_download <- function(tableID, vars, lang = "en") {
+dst_download <- function(tableID, vars, lang = "en", coltypes) {
   lang <- lang_helper(lang)
   url <- modify_url_helper("data", tableID = tableID)
 
@@ -35,11 +36,9 @@ dst_download <- function(tableID, vars, lang = "en") {
     vars_helper(tableID, vars, lang)
     query <- query_helper(vars, lang)
 
-    col_types <- col_helper(vars)
   } else {
     vars_helper(tableID, vars, lang)
     query <- query_helper(vars, lang)
-    col_types <- col_helper(vars)
   }
 
 
@@ -47,9 +46,13 @@ dst_download <- function(tableID, vars, lang = "en") {
     msg <- fromJSON(content(GET(url, query = query), "text"))[["message"]]
     abort(msg)
   }
-
-  res <- read_csv2(modify_url(url, query = query), na = c(".."), col_types = col_types,
-            locale = locale(decimal_mark = ",", grouping_mark = "."))
+  if(missing(coltypes)) {
+    res <- read_csv2(modify_url(url, query = query), na = c(".."),
+                     locale = locale(decimal_mark = ",", grouping_mark = "."))
+  } else {
+    res <- read_csv2(modify_url(url, query = query), na = c(".."), coltypes = coltypes,
+                     locale = locale(decimal_mark = ",", grouping_mark = "."))
+  }
   res["TID"] <- parse_date_helper(res[["TID"]])
   res
 }
@@ -125,11 +128,6 @@ query_helper <- function(vars, lang) {
     vars <- vars[!names(vars) == "Tid"]
     c(list(Tid = "*", Lang = lang), map(vars, str_c, collapse = ","))
   }
-}
-
-col_helper <- function(vars) {
-  col_types <- str_c(rep("c", times = (length(vars)+1)), collapse = "")
-  str_c(col_types, "d")
 }
 
 is_valid_values <- function(vars_names, vars, x) {

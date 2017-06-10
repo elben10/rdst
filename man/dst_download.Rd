@@ -4,7 +4,7 @@
 \alias{dst_download}
 \title{download data sets from Statistics Denmark}
 \usage{
-dst_download(tableID, vars, lang = "en")
+dst_download(tableID, vars, lang = "en", coltypes)
 }
 \arguments{
 \item{tableID}{the data set's ID. See dst_tables() to get the ID.}
