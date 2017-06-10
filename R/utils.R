@@ -123,3 +123,15 @@ parse_date_helper <- function(x) {
     x
   }
 }
+
+input_warning <- function(cond, msg) {
+  if(!all(cond)) {
+    abort(msg)
+  }
+}
+
+input_warning <- function(cond, msg) {
+  if(!all(cond)) {
+    abort(glue(msg))
+  }
+}

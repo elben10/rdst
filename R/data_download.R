@@ -66,6 +66,7 @@ dst_download <- function(tableID, vars, lang = "en") {
 #' @examples
 #' ## Not run:
 #' dst_download("FOLK1A")
+#'
 #' ## End(Not run)
 #' dst_variables("FOLK1A", columns = c("id", "text", "time"))
 dst_variables <- function(tableID, lang = "en", columns = c("id", "text")) {
