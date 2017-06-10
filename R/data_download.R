@@ -29,7 +29,6 @@ dst_download <- function(tableID, vars, lang = "en") {
   if(is_missing(vars)) {
     message("No vars is specified. Only time will be included")
     query <-  list(lang = lang, Tid = "*")
-    vars <- set_names("*", "Tid")
     col_types <- "cd"
   } else if(is_character(vars)) {
     vars_helper(tableID, vars)
@@ -99,4 +98,5 @@ vars_helper <- function(tableID, vars) {
     }
   }
 }
+
 
