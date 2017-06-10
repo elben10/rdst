@@ -24,7 +24,7 @@ NULL
 #' @examples
 #' dst_download("folk1a")
 #' dst_download("folk1a", c("ALDER", "CIVILSTAND"))
-dst_download <- function(tableID, vars, lang = "en", coltypes) {
+dst_download <- function(tableID, vars, lang = "en") {
   lang <- lang_helper(lang)
   url <- modify_url_helper("data", tableID = tableID)
 
@@ -46,13 +46,8 @@ dst_download <- function(tableID, vars, lang = "en", coltypes) {
     msg <- fromJSON(content(GET(url, query = query), "text"))[["message"]]
     abort(msg)
   }
-  if(missing(coltypes)) {
     res <- read_csv2(modify_url(url, query = query), na = c(".."),
                      locale = locale(decimal_mark = ",", grouping_mark = "."))
-  } else {
-    res <- read_csv2(modify_url(url, query = query), na = c(".."), coltypes = coltypes,
-                     locale = locale(decimal_mark = ",", grouping_mark = "."))
-  }
   res["TID"] <- parse_date_helper(res[["TID"]])
   res
 }
