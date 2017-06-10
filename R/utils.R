@@ -123,18 +123,5 @@ parse_date_helper <- function(x) {
     x
   }
 }
-<<<<<<< HEAD
 
-input_warning <- function(cond, msg) {
-  if(!all(cond)) {
-    abort(msg)
-  }
-}
 
-input_warning_glue <- function(cond, msg) {
-  if(!all(cond)) {
-    abort(glue(msg))
-  }
-}
-=======
->>>>>>> parent of 9a4dd59... add abort helpers
