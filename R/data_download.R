@@ -1,8 +1,10 @@
 #' @importFrom stringr str_c
 #' @importFrom purrr flatten_chr
+#' @importFrom purrr is_list
 #' @importFrom readr read_csv2
 #' @importFrom rlang is_character
 #' @importFrom rlang set_names
+#' @importFrom rlang is_named
 #' @importFrom readr locale
 NULL
 
@@ -23,22 +25,19 @@ NULL
 dst_download <- function(tableID, vars, lang = "en") {
   lang <- lang_helper(lang)
   url <- modify_url_helper("data", tableID = tableID)
+
   if(is_missing(vars)) {
-    warning("No vars is specified. Only time will be included")
+    message("No vars is specified. Only time will be included")
     query <-  list(lang = lang, Tid = "*")
-  }
-  vars <- vars_helper(tableID, vars)
-  vars <- set_names(rep("*", length(vars)), vars)
-
-  if("Tid" %in% names(vars)) {
-    vars <- vars[!names(vars) %in% "Tid"]
-    query <- c(list(lang = lang, Tid = "*"), vars)
+    vars <- set_names("*", "Tid")
+    col_types <- "cd"
+  } else if(is_character(vars)) {
+    vars_helper(tableID, vars)
+    col_types <- str_c(rep("c", times = (length(vars)+1)), collapse = "")
+    col_types <- str_c(col_types, "d")
   } else {
-    query <- c(list(lang = lang, Tid = "*"), vars)
+    vars_helper(tableID, vars)
   }
-
-  col_types <- str_c(rep("c", times = (length(vars)+1)), collapse = "")
-  col_types <- str_c(col_types, "d")
 
 
   if(status_code(GET(url, query = query)) == 400) {
@@ -84,14 +83,19 @@ dst_variables <- function(tableID, lang = "en", columns = c("id", "text")) {
 }
 
 vars_helper <- function(tableID, vars) {
-  if(!is_missing(vars)) {
+  if(!(is_list(vars) & is_named(vars)) & !is_character(vars)) {
+    abort(glue('vars has to be provided as either a character vector containing variable ',
+               'or as a named list containing the desired variables as names, and',
+               'the associated element has to include a charactervector containing the',
+               'desired values of the variable'))
+  }
+
+  if(!is_missing(vars) & !is_list(vars)) {
     if(!all(vars %in% flatten_chr(dst_variables(tableID, columns = "id")))) {
       abort(glue('vars can take the following values: ',
-                 '{str_c(flatten_chr(dst_variables("BEV22", columns = "id")), collapse = ", ")}. ',
+                 '{str_c(flatten_chr(dst_variables(tableID, columns = "id")), collapse = ", ")}. ',
                  'The values must be provided as an charactervector. ',
                  'See dst_variables() for explanation of the vars'))
-    } else {
-      return(vars)
     }
   }
 }
