@@ -32,10 +32,13 @@ dst_download <- function(tableID, vars, lang = "en") {
     col_types <- "cd"
   } else if(is_character(vars)) {
     vars_helper(tableID, vars)
-    col_types <- str_c(rep("c", times = (length(vars)+1)), collapse = "")
-    col_types <- str_c(col_types, "d")
+    query <- query_helper(vars, lang)
+
+    col_types <- col_helper(vars)
   } else {
     vars_helper(tableID, vars)
+    query <- query_helper(vars, lang)
+    col_types <- col_helper(vars)
   }
 
 
@@ -89,14 +92,36 @@ vars_helper <- function(tableID, vars) {
                'desired values of the variable'))
   }
 
-  if(!is_list(vars)) {
+  if(is_character(vars)) {
     if(!all(vars %in% flatten_chr(dst_variables(tableID, columns = "id")))) {
       abort(glue('vars can take the following values: ',
                  '{str_c(flatten_chr(dst_variables(tableID, columns = "id")), collapse = ", ")}. ',
                  'The values must be provided as an charactervector. ',
                  'See dst_variables() for explanation of the vars'))
     }
+  } else {
+    if(!all(names(vars) %in% flatten_chr(dst_variables(tableID, columns = "id")))) {
+      abort(glue('vars can take the following values: ',
+                 '{str_c(flatten_chr(dst_variables(tableID, columns = "id")), collapse = ", ")}. ',
+                 'The values must be provided as an charactervector. ',
+                 'See dst_variables() for explanation of the vars'))
+    }
   }
+}
+
+query_helper <- function(vars, lang) {
+  if(is_character(vars)) {
+    vars <- vars[!vars %in% "Tid"]
+    as_list(set_names(c(lang, rep("*", length(vars) + 1)), c("Lang", "Tid", vars)))
+  } else {
+    vars <- vars[!names(vars) == "Tid"]
+    c(list(Tid = "*", Lang = lang), vars)
+  }
+}
+
+col_helper <- function(vars) {
+  col_types <- str_c(rep("c", times = (length(vars)+1)), collapse = "")
+  str_c(col_types, "d")
 }
 
 
