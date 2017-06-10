@@ -130,7 +130,7 @@ input_warning <- function(cond, msg) {
   }
 }
 
-input_warning <- function(cond, msg) {
+input_warning_glue <- function(cond, msg) {
   if(!all(cond)) {
     abort(glue(msg))
   }
