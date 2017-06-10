@@ -20,9 +20,6 @@ You can use this function to get a tibble which has information about the availa
 in the respective data set as well as an description of those
 }
 \examples{
-## Not run:
-dst_download("FOLK1A")
-
-## End(Not run)
-dst_variables("FOLK1A", columns = c("id", "text", "time"))
+dst_variables("folk1a")
+dst_variables("folk1a", columns = c("id", "text", "time"))
 }
