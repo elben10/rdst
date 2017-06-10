@@ -64,8 +64,10 @@ dst_download <- function(tableID, vars, lang = "en") {
 #' elimination, time or map
 #' @export
 #' @examples
-#' dst_variables("folk1a")
-#' dst_variables("folk1a", columns = c("id", "text", "time"))
+#' ## Not run:
+#' dst_download("FOLK1A")
+#' ## End(Not run)
+#' dst_variables("FOLK1A", columns = c("id", "text", "time"))
 dst_variables <- function(tableID, lang = "en", columns = c("id", "text")) {
   lang <- lang_helper(lang)
   url <- modify_url_helper("tableinfo", tableID = tableID)
