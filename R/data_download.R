@@ -90,7 +90,7 @@ vars_helper <- function(tableID, vars) {
                'desired values of the variable'))
   }
 
-  if(!is_missing(vars) & !is_list(vars)) {
+  if(!is_list(vars)) {
     if(!all(vars %in% flatten_chr(dst_variables(tableID, columns = "id")))) {
       abort(glue('vars can take the following values: ',
                  '{str_c(flatten_chr(dst_variables(tableID, columns = "id")), collapse = ", ")}. ',
