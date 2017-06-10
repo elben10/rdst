@@ -2,6 +2,7 @@
 #' @importFrom purrr map_dbl
 #' @importFrom purrr map2_dbl
 #' @importFrom stringr str_to_upper
+#' @importFrom stringr str_to_lower
 #' @importFrom stringr str_detect
 #' @importFrom stringr str_sub
 #' @importFrom lubridate myd
@@ -27,6 +28,7 @@ modify_url_helper <- function(type, tableID, lang = "en") {
 }
 
 lang_helper <- function(lang) {
+  lang <- str_to_lower(lang)
   if(!lang %in% c("en", "da")) {
     abort('lang can only take the values: "en" or "da')
   }
