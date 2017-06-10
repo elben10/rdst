@@ -85,7 +85,6 @@ dst_variables <- function(tableID, lang = "en", columns = c("id", "text")) {
   fromJSON(content(GET_res, "text"))[["variables"]][columns]
 }
 
-#' @export
 vars_helper <- function(tableID, vars, lang) {
   if(!(is_list(vars) & is_named(vars)) & !is_character(vars)) {
     abort(glue('vars has to be provided as either a character vector containing variable ',
