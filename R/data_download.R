@@ -1,6 +1,7 @@
 #' @importFrom stringr str_c
 #' @importFrom purrr flatten_chr
 #' @importFrom purrr is_list
+#' @importFrom purrr map2_lgl
 #' @importFrom readr read_csv2
 #' @importFrom rlang is_character
 #' @importFrom rlang set_names
@@ -31,12 +32,12 @@ dst_download <- function(tableID, vars, lang = "en") {
     query <-  list(lang = lang, Tid = "*")
     col_types <- "cd"
   } else if(is_character(vars)) {
-    vars_helper(tableID, vars)
+    vars_helper(tableID, vars, lang)
     query <- query_helper(vars, lang)
 
     col_types <- col_helper(vars)
   } else {
-    vars_helper(tableID, vars)
+    vars_helper(tableID, vars, lang)
     query <- query_helper(vars, lang)
     col_types <- col_helper(vars)
   }
@@ -84,7 +85,8 @@ dst_variables <- function(tableID, lang = "en", columns = c("id", "text")) {
   fromJSON(content(GET_res, "text"))[["variables"]][columns]
 }
 
-vars_helper <- function(tableID, vars) {
+#' @export
+vars_helper <- function(tableID, vars, lang) {
   if(!(is_list(vars) & is_named(vars)) & !is_character(vars)) {
     abort(glue('vars has to be provided as either a character vector containing variable ',
                'or as a named list containing the desired variables as names, and',
@@ -100,11 +102,18 @@ vars_helper <- function(tableID, vars) {
                  'See dst_variables() for explanation of the vars'))
     }
   } else {
-    if(!all(names(vars) %in% flatten_chr(dst_variables(tableID, columns = "id")))) {
+    if(!all(names(vars) %in% dst_variables(tableID, columns = "id")[["id"]])) {
       abort(glue('vars can take the following values: ',
                  '{str_c(flatten_chr(dst_variables(tableID, columns = "id")), collapse = ", ")}. ',
                  'The values must be provided as an charactervector. ',
                  'See dst_variables() for explanation of the vars'))
+    }
+    values <- dst_variable_values(tableID, lang)[names(vars)]
+    cond <- map2_lgl(names(values), vars, is_valid_values, tableID)
+    vars <- vars[!vars %in% "Tid"]
+    if(!all(cond)) {
+      abort(glue('The values is not provided correctly in the vars argument. ',
+            'See dst_variable_values()'))
     }
   }
 }
@@ -115,13 +124,18 @@ query_helper <- function(vars, lang) {
     as_list(set_names(c(lang, rep("*", length(vars) + 1)), c("Lang", "Tid", vars)))
   } else {
     vars <- vars[!names(vars) == "Tid"]
-    c(list(Tid = "*", Lang = lang), vars)
+    c(list(Tid = "*", Lang = lang), map(vars, str_c, collapse = ","))
   }
 }
 
 col_helper <- function(vars) {
   col_types <- str_c(rep("c", times = (length(vars)+1)), collapse = "")
   str_c(col_types, "d")
+}
+
+is_valid_values <- function(vars_names, vars, x) {
+  vars <- vars[!vars %in% "Tid"]
+  all(vars %in% dst_variable_values(x)[[vars_names]])
 }
 
 
