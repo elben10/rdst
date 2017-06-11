@@ -26,7 +26,7 @@ dst_tables <- function(subjectsID, lang = "en", columns = c("id", "text")) {
   lang <- lang_helper(lang)
 
   columns_values <- c("id", "text", "unit", "updated", "firstPeriod", "latestPeriod",
-                      "active", "variables")
+                      "active", "variables", "all")
   subjectsID_values <- c("01", "02", "03", "04", "05", "06", "07", "11", "13", "14", "16", "18")
 
   if(!all(columns %in% columns_values)) {
@@ -49,7 +49,12 @@ dst_tables <- function(subjectsID, lang = "en", columns = c("id", "text")) {
   }
 
   GET_res <- GET(url, query = query)
-  as_tibble(fromJSON(content(GET_res, "text"))[columns])
+
+  if(all(columns == "all")) {
+    as_tibble(fromJSON(content(GET_res, "text")))
+  } else {
+    as_tibble(fromJSON(content(GET_res, "text"))[columns])
+  }
 }
 
 table_helper <- function(tableID) {
@@ -61,4 +66,21 @@ table_helper <- function(tableID) {
   }
 
   tableID
+}
+
+#' @export
+dst_tables_search <- function(subjectsID, includes, excludes, lang = "en", columns = c("id", "text")) {
+  if(is_missing(includes) & is_missing(excludes)) {
+   abort("includes and excludes is missing. Use dst_tables() instead.")
+  } else if(is_missing(excludes)) {
+    tables <- dst_tables(subjectsID = subjectsID, lang = lang, columns = columns)
+    tables[str_detect(tables[["text"]], includes), ]
+  } else if(is_missing(includes)) {
+    tables <- dst_tables(subjectsID = subjectsID, lang = lang, columns = columns)
+    tables[!str_detect(tables[["text"]], excludes), ]
+  } else {
+    tables <- dst_tables(subjectsID = subjectsID, lang = lang, columns = columns)
+    tables[!str_detect(tables[["text"]], excludes) & str_detect(tables[["text"]], includes), ]
+  }
+
 }
