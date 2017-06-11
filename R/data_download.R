@@ -127,6 +127,7 @@ query_helper <- function(vars, lang) {
 
 is_valid_values <- function(vars_names, vars, x) {
   vars <- vars[!vars %in% "Tid"]
+  vars <- keep(vars, function(x) x != "*")
   all(vars %in% dst_variable_values(x)[[vars_names]])
 }
 
