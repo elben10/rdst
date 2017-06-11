@@ -16,14 +16,14 @@ NULL
 #' @export
 #' @examples dst_information("folk1a")
 dst_information <- function(tableID, lang = "en",
-                            columns = c("id", "description", "contactperson", "mail")) {
+                            columns = c("id", "description", "contactperson", "mail", "url")) {
   lang_helper(lang)
   url <- modify_url_helper("tableinfo", tableID = tableID)
   table_helper(tableID)
   query <- list(format = "JSON", lang = lang)
 
   columns_values <- c("id", "text", "description", "unit", "updated", "contactperson", "phone",
-                      "mail", "documentationID", "url", "footnote")
+                      "mail", "documentationID", "url", "footnote", "all")
 
   if(!all(columns %in% columns_values)) {
     abort(glue('Variables can only take the values: {columns_values}',
@@ -38,7 +38,11 @@ dst_information <- function(tableID, lang = "en",
 
   names(gen_info)[6] <- "contactperson"
   names(gen_info)[9] <- "documentationID"
-  print_information(gen_info[columns])
+  if(columns == "all") {
+    print_information(gen_info)
+  } else {
+    print_information(gen_info[columns])
+  }
 }
 
 extract_helper <- function(x, indx) {

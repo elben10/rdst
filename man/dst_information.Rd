@@ -5,7 +5,7 @@
 \title{get information about Statistics Denmark's data sets}
 \usage{
 dst_information(tableID, lang = "en", columns = c("id", "description",
-  "contactperson", "mail"))
+  "contactperson", "mail", "url"))
 }
 \arguments{
 \item{tableID}{the data set's ID. See dst_tables()}
