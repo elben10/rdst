@@ -23,7 +23,7 @@ dst_information <- function(tableID, lang = "en",
   query <- list(format = "JSON", lang = lang)
 
   columns_values <- c("id", "text", "description", "unit", "updated", "contactperson", "phone",
-                      "mail", "documentationID", "url", "footnote", "all")
+                      "mail", "documentationID", "url", "footnote")
 
   if(!all(columns %in% columns_values)) {
     abort(glue('Variables can only take the values: {columns_values}',
@@ -38,11 +38,7 @@ dst_information <- function(tableID, lang = "en",
 
   names(gen_info)[6] <- "contactperson"
   names(gen_info)[9] <- "documentationID"
-  if(columns == "all") {
-    print_information(gen_info)
-  } else {
-    print_information(gen_info[columns])
-  }
+  print_information(gen_info[columns])
 }
 
 extract_helper <- function(x, indx) {
